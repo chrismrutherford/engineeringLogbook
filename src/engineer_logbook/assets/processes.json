@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0",
+  "processes": {
+    "sdd": {
+      "name": "Spec-Driven Development",
+      "description": "Build a feature or application: a specification carried through planning, implementation, and convergence.",
+      "when_to_use": "Building a new feature or application from requirements.",
+      "steps": [
+        {
+          "id": "constitution",
+          "file": "constitution.md",
+          "description": "Create or update project principles (once per project).",
+          "requires": [],
+          "requires_artifacts": {
+            "min_total": 1,
+            "any_of_globs": [
+              "constitution.md"
+            ]
+          }
+        },
+        {
+          "id": "specify",
+          "file": "specify.md",
+          "description": "Create or update the feature specification from a natural language description.",
+          "requires": [],
+          "args_example": "Build a photo organizer with albums grouped by date",
+          "requires_artifacts": {
+            "min_total": 1,
+            "any_of_globs": [
+              "spec.md"
+            ]
+          }
+        },
+        {
+          "id": "clarify",
+          "file": "clarify.md",
+          "description": "Ask up to 5 targeted questions to resolve underspecified areas of the spec.",
+          "requires": [
+            "specify"
+          ],
+          "optional": true,
+          "args_example": ""
+        },
+        {
+          "id": "plan",
+          "file": "plan.md",
+          "description": "Generate design artifacts: research, data model, contracts, quickstart.",
+          "requires": [
+            "specify"
+          ],
+          "args_example": "Use Vite with vanilla JavaScript. Store metadata in SQLite.",
+          "requires_artifacts": {
+            "min_total": 1,
+            "any_of_globs": [
+              "plan.md"
+            ]
+          }
+        },
+        {
+          "id": "tasks",
+          "file": "tasks.md",
+          "description": "Generate an actionable, dependency-ordered tasks.md.",
+          "requires": [
+            "plan"
+          ],
+          "args_example": "",
+          "requires_artifacts": {
+            "min_total": 1,
+            "any_of_globs": [
+              "tasks.md"
+            ]
+          }
+        },
+        {
+          "id": "analyze",
+          "file": "analyze.md",
+          "description": "Cross-artifact consistency analysis across spec, plan, and tasks.",
+          "requires": [
+            "tasks"
+          ],
+          "optional": true,
+          "args_example": ""
+        },
+        {
+          "id": "checklist",
+          "file": "checklist.md",
+          "description": "Generate a quality checklist for a domain (ux, security, performance...).",
+          "requires": [
+            "specify"
+          ],
+          "optional": true,
+          "args_example": "ux performance"
+        },
+        {
+          "id": "implement",
+          "file": "implement.md",
+          "description": "One mini-V iteration: implement the next unchecked task(s) with unit tests, run them. Repeat implement/converge until converged.",
+          "requires": [
+            "tasks"
+          ],
+          "args_example": "",
+          "requires_artifacts": {
+            "min_total": 2,
+            "any_of_globs": [
+              "*test*"
+            ]
+          }
+        },
+        {
+          "id": "converge",
+          "file": "converge.md",
+          "description": "Verify the increment against the spec (system-level). Iterate via implement, or converge and ask the user for sign-off.",
+          "requires": [
+            "implement"
+          ],
+          "args_example": "",
+          "requires_artifacts": {
+            "min_total": 1,
+            "any_of_globs": [
+              "*verification*"
+            ]
+          }
+        }
+      ]
+    },
+    "bugfix": {
+      "name": "Bug Fixing",
+      "description": "Diagnose and repair broken behavior with separate assessment, fix, and verification.",
+      "when_to_use": "Something is broken and you need an assessed cause, scoped fix, and recorded verification.",
+      "steps": [
+        {
+          "id": "assess",
+          "file": "speckit.bug.assess.md",
+          "description": "Assess a bug report against the codebase; produce remediation assessment.",
+          "requires": [],
+          "args_example": "Submitting an empty password crashes the login form. slug=login-crash"
+        },
+        {
+          "id": "fix",
+          "file": "speckit.bug.fix.md",
+          "description": "Implement the scoped fix from the assessment.",
+          "requires": [
+            "assess"
+          ],
+          "args_example": "slug=login-crash"
+        },
+        {
+          "id": "test",
+          "file": "speckit.bug.test.md",
+          "description": "Verify the fix against the original symptom; verdict: verified/partial/failed.",
+          "requires": [
+            "fix"
+          ],
+          "args_example": "slug=login-crash"
+        }
+      ]
+    },
+    "assess": {
+      "name": "Idea Assessment",
+      "description": "Gather evidence on an idea before committing: go / needs-clarification / kill decision.",
+      "when_to_use": "Deciding whether an idea deserves investment, with or without existing code.",
+      "steps": [
+        {
+          "id": "intake",
+          "file": "speckit.assess.intake.md",
+          "description": "Capture and normalize a raw idea into an intake note.",
+          "requires": [],
+          "args_example": "Let users work offline and sync when they reconnect. slug=offline-mode"
+        },
+        {
+          "id": "research",
+          "file": "speckit.assess.research.md",
+          "description": "Gather evidence about the idea from the market, users, and codebase.",
+          "requires": [
+            "intake"
+          ],
+          "args_example": "slug=offline-mode"
+        },
+        {
+          "id": "define",
+          "file": "speckit.assess.define.md",
+          "description": "Define the solution space and constraints from research.",
+          "requires": [
+            "research"
+          ],
+          "args_example": "slug=offline-mode"
+        },
+        {
+          "id": "shape",
+          "file": "speckit.assess.shape.md",
+          "description": "Shape candidate approaches with trade-offs.",
+          "requires": [
+            "define"
+          ],
+          "args_example": "slug=offline-mode"
+        },
+        {
+          "id": "decide",
+          "file": "speckit.assess.decide.md",
+          "description": "Produce the go / needs-clarification / kill decision record.",
+          "requires": [
+            "shape"
+          ],
+          "args_example": "slug=offline-mode"
+        }
+      ]
+    }
+  },
+  "slug_steps": {
+    "bugfix": [
+      "assess",
+      "fix",
+      "test"
+    ],
+    "assess": [
+      "intake",
+      "research",
+      "define",
+      "shape",
+      "decide"
+    ]
+  }
+}
